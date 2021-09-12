@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		body{
+			background: linear-gradient(-190deg, lime 50%,green 50%);
+			display: flex;
+			justify-content: center;
+			align-items:center;
+			min-height: 100vh;
+
+		}
+button{
+	padding: 10px 30px;
+	border: none;
+	outline: none;
+	background:linear-gradient(130deg, red 50% , blue 50%);
+	color:white;
+	font-size: 30px;
+	font-family:cursive;
+    transform: rotate(-10deg);
+}
+
+
+	</style>
+</head>
+<body>
+	<button>get location</button>
+
+
+	<script type="text/javascript">
+		let button = document.querySelector("button");
+
+		button.onclick = () => {
+			if(navigator.geolocation){
+				navigator.geolocation.getCurrentPosition(onSuccess, onError);
+			}else{
+				button.innerText = "Siz brauzerni qo'llab -quvvatlamaysiz";
+			}
+
+		}
+
+	function onSuccess(position) {
+		button.innerText = "malumot olinmoqda....";
+	    const {latitude,longitude} = position.coords;
+	    		let api_key = "13fc0b4ce0594b74be62c3e59a924033";
+ let url = 	`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${api_key}`;
+
+ 			fetch(url)
+ 			.then(res => res.json())
+ 			.then(data => {
+ 				let AllDetails = data.results[0].components;
+ 				let {county,country} = AllDetails;
+ 				button.innerText = `${county},  ${country}`;
+ 			})
+
+
+
+
+
+
+	}
+
+function onError(error) {
+	if (error.code === 1) {
+		button.innerText = "Siz so'roni rad qildingiz";
+	}else if(error.code === 2){
+		button.innerText = "Sizda joylashuv mavjud emas";
+	}else{
+		console.log("nimadir noto'g'ri bajarildi");
+	}
+
+	button.setAttribute("disabled", "true"); // agar foydalanuvchi rad qilsa button disabled bo'ladi
+}
+
+
+// document.querySelector("body").onscroll = Sroll;
+
+
+// function Sroll(e) {
+// 	if (e.timeStamp === 28278.90000000596) {
+	
+
+// 	}
+//     let num  = parseInt(e.timeStamp);
+
+
+
+// }
+
+
+
+	</script>
+
+  <script src="index.js"></script>
+</body>
+</html>
